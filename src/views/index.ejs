@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conducteurs - VroomKids</title>
+    <link rel="shortcut icon" type="image/x-icon" href="<%= url %>/images/favicon.png">
+    <link rel="stylesheet" href="<%= url %>/css/style-bootstrap-grid.min.css">
+    <link rel="stylesheet" href="<%= url %>/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col text_center_vroom">
+                <h1>Dashboard</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <%- include("components/menu") %>
+        <div class="row">
+            <div class="col">
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Lastname</th>
+                        <th>Email</th>
+                        <th></th>
+                    </tr>
+                    <%
+                    if (locals.data_users) {
+                        let data_conducteurs_length = data_users.length;
+                        for (let i = 0; i < data_conducteurs_length; i++) {
+                    %>
+                    <tr>
+                        <td><%= data_users[i]['name'] %></td>
+                        <td><%= data_users[i]['lastname'] %></td>
+                        <td><%= data_users[i]['email'] %></td>
+                        <td>
+                            <form action="/supprimer-user/<%= data_users[i]['_id'] %>" method="post">
+                                <input type="submit" value="Supprimer">
+                            </form>
+                        </td>
+                    </tr>
+                    <%
+                        }
+                    }
+                    %>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="<%= url %>/js/jquery-3.6.0.min.js"></script>
+    <script src="<%= url %>/js/script.js"></script>
+</body>
+
+</html>

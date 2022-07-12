@@ -1,0 +1,21 @@
+{
+  "name": "hetic-vroom-back-office",
+  "version": "1.0.0",
+  "description": "- npm init -y\r - npm install express\r - npm install ejs\r - npm install dotenv\r - npm install --save-dev nodemon",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.1",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.18"
+  }
+}
