@@ -115,6 +115,9 @@ export default {
               localStorage.setItem("refreshToken", response.data.refreshToken);
               window.location.href = "/";
             }
+            else {
+              this.error = "Non autorisé";
+            }
           }
         })
         .catch((error) => {
@@ -122,7 +125,7 @@ export default {
             this.error = error.response.data.message; 
           }
           else {
-            this.error = "Erreur"; 
+            this.error = "Erreur";
           }
         });
     }

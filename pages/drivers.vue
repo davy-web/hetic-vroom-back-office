@@ -83,14 +83,15 @@ export default {
   mounted() {
     if (localStorage.getItem("token")) {
       axios
-        .get('/api/drivers/get', {
-          headers: {
-            "content-type": "application/json",
-            "x-access-token": localStorage.getItem("token")
-          }
-        })
+        .get('/api/driver/getAllDriver')
         .then((response) => {
+          if (response && response.data) {
           this.drivers = response.data;
+          }
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
         });
     }
     else {

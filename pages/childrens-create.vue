@@ -1,5 +1,5 @@
 <template>
-  <section id="page-drivers" class="">
+  <section id="page-childrens" class="">
     <div class="overflow-hidden">
       <div class="mx-auto">
 
@@ -13,10 +13,10 @@
 
           <div class="grid px-8 md:px-12 md:gap-8">
             <div>
-              <h3 class="vroom_text_color">Ajouter d'un chauffeur</h3>
+              <h3 class="vroom_text_color">Ajouter d'un enfant</h3>
               <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/" class="nuxt-link-active">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="/drivers" class="nuxt-link-active">Chauffeur</a></li>
+                <li class="breadcrumb-item"><a href="/childrens" class="nuxt-link-active">Enfant</a></li>
               <li class="breadcrumb-item">Ajouter</li>
               </ol>
             </div>
@@ -50,26 +50,6 @@
           </div>
           <div class="grid px-8 md:px-12 md:gap-8">
             <base-input-text
-              type="email"
-              namefor="email"
-              label="Adresse e-mail"
-              placeholder=" "
-              pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"
-              :required="true"
-              class="border-b-2 md:mr-8 border-primary-vert1"
-              v-model="email"
-            />
-            <base-input-text
-              type="text"
-              namefor="phone"
-              label="Téléphone"
-              placeholder=" "
-              :required="true"
-              v-model="phone"
-              value="oui"
-              class="border-b-2 md:mr-8 border-primary-vert1"
-            />
-            <base-input-text
               type="date"
               namefor="birthday"
               label="Date de naissance"
@@ -78,28 +58,24 @@
               v-model="birthday"
               class="border-b-2 md:mr-8 border-primary-vert1"
             />
+            <base-input-text
+              type="text"
+              namefor="parentId"
+              label="Parent"
+              placeholder=" "
+              :required="true"
+              v-model="parentId"
+              value="oui"
+              class="border-b-2 md:mr-8 border-primary-vert1"
+            />
           </div>
           <div class="grid px-8 md:px-12 md:grid-cols-3 md:gap-8">
             <div>
-              <label class="form-label vroom_label" for="photo_driver">
-                Image du chauffeur<br><br>
-                <img src="https://hetic-vroom-api.one-website.com/images/default.png" id="image_photo_driver" class="vroom_image" alt="photo_driver"><br>
+              <label class="form-label vroom_label" for="image">
+                Image du enfant<br><br>
+                <img src="https://hetic-vroom-api.one-website.com/images/default.png" id="image_image" class="vroom_image" alt="image"><br>
               </label>
-              <input type="file" id="photo_driver" name="photo_driver">
-            </div>
-            <div>
-              <label class="form-label vroom_label" for="photo_license">
-                Image du permis<br><br>
-                <img src="https://hetic-vroom-api.one-website.com/images/default.png" id="image_photo_license" class="vroom_image" alt="photo_license"><br>
-              </label>
-              <input type="file" id="photo_license" name="photo_license">
-            </div>
-            <div>
-              <label class="form-label vroom_label" for="police_record">
-                Image du casier judiciaire<br><br>
-                <img src="https://hetic-vroom-api.one-website.com/images/default.png" id="image_police_record" class="vroom_image" alt="police_record"><br>
-              </label>
-              <input type="file" id="police_record" name="police_record">
+              <input type="file" id="image" name="image">
             </div>
           </div>
 
@@ -120,22 +96,21 @@
 import axios from "axios";
 
 export default {
-  name: "Drivers",
+  name: "childrens",
 
   data() {
     return {
       error: "",
       firstname: "",
       lastname: "",
-      email: "",
-      phone: "",
       birthday: "",
+      parentId: "",
     };
   },
   head() {
     return {
       bodyAttrs: {
-        class: "drivers",
+        class: "childrens",
       },
     };
   },
@@ -145,32 +120,15 @@ export default {
         const form_data = new FormData();
         form_data.append('firstname', this.firstname);
         form_data.append('lastname', this.lastname);
-        form_data.append('email', this.email);
-        form_data.append('phone', this.phone);
         form_data.append('birthday', this.birthday);
-        form_data.append('images', document.getElementById('photo_driver').files[0]);
-        form_data.append('images', document.getElementById('photo_license').files[0]);
-        form_data.append('images', document.getElementById('police_record').files[0]);
-        axios.post('/api/driver/addDriver', form_data, { headers: { 'Content-Type': 'multipart/form-data' } })
+        form_data.append('parentId', this.parentId);
+        form_data.append('image', document.getElementById('image').files[0]);
+        axios.post('/api/childrens/create/', form_data, { headers: { 'Content-Type': 'multipart/form-data' } })
           .then((response) => {
-            if (response) {
-              if (response && response.data && response.data.message) {
-                this.error = response.data.message;
-              }
-              else {
-                this.error = "Enregisté";
-              }
+            if (response.data.message) {
+              this.error = response.data.message;
               window.scrollTo(0, 0);
             }
-          })
-          .catch((error) => {
-            if (error.response && error.response.data && error.response.data.message) {
-              this.error = error.response.data.message;
-            }
-            else {
-              this.error = "Erreur";
-            }
-            window.scrollTo(0, 0);
           });
       }
       else {
@@ -180,14 +138,8 @@ export default {
   },
   mounted() {
     if (localStorage.getItem("token")) {
-      document.getElementById("photo_driver").addEventListener('change', function (event) {
-        document.getElementById("image_photo_driver").src = URL.createObjectURL(document.getElementById("photo_driver").files[0]);
-      });
-      document.getElementById("photo_license").addEventListener('change', function (event) {
-        document.getElementById("image_photo_license").src = URL.createObjectURL(document.getElementById("photo_license").files[0]);
-      });
-      document.getElementById("police_record").addEventListener('change', function (event) {
-        document.getElementById("image_police_record").src = URL.createObjectURL(document.getElementById("police_record").files[0]);
+      document.getElementById("image").addEventListener('change', function (event) {
+        document.getElementById("image_image").src = URL.createObjectURL(document.getElementById("image").files[0]);
       });
     }
     else {
