@@ -151,17 +151,16 @@ export default {
         form_data.append('images', document.getElementById('photo_driver').files[0]);
         form_data.append('images', document.getElementById('photo_license').files[0]);
         form_data.append('images', document.getElementById('police_record').files[0]);
-        axios.post('/api/driver/addDriver', form_data, { headers: { 'Content-Type': 'multipart/form-data' } })
+        axios
+          .post('/api/driver/addDriver', form_data, { headers: { 'Content-Type': 'multipart/form-data' } })
           .then((response) => {
-            if (response) {
-              if (response && response.data && response.data.message) {
-                this.error = response.data.message;
-              }
-              else {
-                this.error = "Enregisté";
-              }
-              window.scrollTo(0, 0);
+            if (response && response.data && response.data.message) {
+              this.error = response.data.message;
             }
+            else {
+              this.error = "Enregisté";
+            }
+            window.scrollTo(0, 0);
           })
           .catch((error) => {
             if (error.response && error.response.data && error.response.data.message) {

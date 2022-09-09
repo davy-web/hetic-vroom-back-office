@@ -71,44 +71,35 @@
             />
             <base-input-text
               type="date"
-              namefor="date_of_birth"
+              namefor="birthday"
               label="Date de naissance"
               placeholder=" "
               :required="true"
-              v-model="date_of_birth"
+              v-model="birthday"
               class="border-b-2 md:mr-8 border-primary-vert1"
             />
-            <div style="transform: translateY(-20px);">
-              <label class="form-label vroom_label" for="gender">Genre</label>
-              <select class="form-select vroom_select" id="gender" name="gender" v-model="gender" aria-label="Default select example">
-                <option selected="selected">{{ gender }}</option>
-                <option value="homme">Homme</option>
-                <option value="femme">Femme</option>
-                <option value="autre">Autre</option>
-              </select>
-            </div>
           </div>
           <div class="grid px-8 md:px-12 md:grid-cols-3 md:gap-8">
             <div>
               <label class="form-label vroom_label" for="photo_driver">
                 Image du chauffeur<br><br>
-                <img src="https://hetic-vroom-api.one-website.com/images/default.png" id="image_photo_driver" class="vroom_image" alt="photo_driver"><br>
+                <img src="https://localhost:80/images/default.png" id="image_photo_driver" class="vroom_image" alt="photo_driver"><br>
               </label>
-              <input type="file" id="photo_driver" name="photo_driver" value="">
+              <input type="file" id="photo_driver" name="photo_driver">
             </div>
             <div>
               <label class="form-label vroom_label" for="photo_license">
                 Image du permis<br><br>
-                <img src="https://hetic-vroom-api.one-website.com/images/default.png" id="image_photo_license" class="vroom_image" alt="photo_license"><br>
+                <img src="https://localhost:80/images/default.png" id="image_photo_license" class="vroom_image" alt="photo_license"><br>
               </label>
-              <input type="file" id="photo_license" name="photo_license" value="">
+              <input type="file" id="photo_license" name="photo_license">
             </div>
             <div>
               <label class="form-label vroom_label" for="police_record">
                 Image du casier judiciaire<br><br>
-                <img src="https://hetic-vroom-api.one-website.com/images/default.png" id="image_police_record" class="vroom_image" alt="police_record"><br>
+                <img src="https://localhost:80/images/default.png" id="image_police_record" class="vroom_image" alt="police_record"><br>
               </label>
-              <input type="file" id="police_record" name="police_record" value="">
+              <input type="file" id="police_record" name="police_record">
             </div>
           </div>
 
@@ -138,8 +129,7 @@ export default {
       lastname: "",
       email: "",
       phone: "",
-      date_of_birth: "",
-      gender: "",
+      birthday: "",
     };
   },
   head() {
@@ -158,18 +148,29 @@ export default {
           form_data.append('lastname', this.lastname);
           form_data.append('email', this.email);
           form_data.append('phone', this.phone);
-          form_data.append('date_of_birth', this.date_of_birth);
-          form_data.append('gender', this.gender);
-          form_data.append('photo_driver', document.getElementById('photo_driver').files[0]);
-          form_data.append('photo_license', document.getElementById('photo_license').files[0]);
-          form_data.append('police_record', document.getElementById('police_record').files[0]);
-          form_data.append('token', localStorage.getItem("token"));
-          axios.put('/api/drivers/update/' + this.$route.query.id, form_data, { headers: { 'Content-Type': 'multipart/form-data' } })
+          form_data.append('birthday', this.birthday);
+          form_data.append('images', document.getElementById('photo_driver').files[0]);
+          form_data.append('images', document.getElementById('photo_license').files[0]);
+          form_data.append('images', document.getElementById('police_record').files[0]);
+          axios
+            .put('/api/driver/update/' + this.$route.query.id, form_data, { headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {
-              if (response.data.message) {
+              if (response && response.data && response.data.message) {
                 this.error = response.data.message;
-                window.scrollTo(0, 0);
               }
+              else {
+                this.error = "Enregisté";
+              }
+              window.scrollTo(0, 0);
+            })
+            .catch((error) => {
+              if (error.response && error.response.data && error.response.data.message) {
+                this.error = error.response.data.message;
+              }
+              else {
+                this.error = "Erreur";
+              }
+              window.scrollTo(0, 0);
             });
         }
       }
@@ -181,34 +182,25 @@ export default {
   mounted() {
     if (localStorage.getItem("token")) {
       if (this.$route.query.id) {
-        this.id = this.$route.query.id;
         axios
-          .get('/api/drivers/get/' + this.$route.query.id, {
-            headers: {
-              "content-type": "application/json",
-              "x-access-token": localStorage.getItem("token")
-            }
-          })
+          .get('/api/driver/get/' + this.$route.query.id)
           .then((response) => {
-            if (response.data) {
-              if (response.data.message) {
-                this.error = response.data.message;
-                window.scrollTo(0, 0);
-              }
-              else {
-                this.firstname = response.data.firstname;
-                this.lastname = response.data.lastname;
-                this.email = response.data.email;
-                this.phone = response.data.phone;
-                this.date_of_birth = response.data.date_of_birth.split('T')[0];
-                this.gender = response.data.gender;
-                document.getElementById("image_photo_driver").src = "https://hetic-vroom-api.one-website.com/images/" + response.data.photo_driver;
-                document.getElementById("image_photo_license").src = "https://hetic-vroom-api.one-website.com/images/" + response.data.photo_license;
-                document.getElementById("image_police_record").src = "https://hetic-vroom-api.one-website.com/images/" + response.data.police_record;
-                document.getElementById("photo_driver").value = response.data.photo_driver;
-                document.getElementById("photo_license").value = response.data.photo_license;
-                document.getElementById("police_record").value = response.data.police_record;
-              }
+            if (response.data && response.data.message) {
+              this.error = response.data.message;
+              window.scrollTo(0, 0);
+            }
+            else {
+              this.firstname = response.data.firstname;
+              this.lastname = response.data.lastname;
+              this.email = response.data.email;
+              this.phone = response.data.phone;
+              this.birthday = response.data.birthday.split('T')[0];
+              document.getElementById("image_photo_driver").src = "http://localhost:80/uploads/" + response.data.photo_driver;
+              document.getElementById("image_photo_license").src = "http://localhost:80/uploads/" + response.data.photo_license;
+              document.getElementById("image_police_record").src = "http://localhost:80/uploads/" + response.data.police_record;
+              document.getElementById("photo_driver").value = response.data.photo_driver;
+              document.getElementById("photo_license").value = response.data.photo_license;
+              document.getElementById("police_record").value = response.data.police_record;
             }
           });
       }

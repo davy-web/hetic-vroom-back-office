@@ -62,13 +62,13 @@
             class="border-b-2 md:mr-8 border-primary-vert1"
           />
           <base-input-text
-            type="password"
-            namefor="confirm_password"
-            label="Confirmation du mot de passe"
-            password-reveal
+            type="text"
+            namefor="phone"
+            label="Téléphone"
             placeholder=" "
             :required="true"
-            v-model="confirm_password"
+            v-model="phone"
+            value="oui"
             class="border-b-2 md:mr-8 border-primary-vert1"
           />
         </div>
@@ -122,7 +122,7 @@ export default {
       lastname: "",
       email: "",
       password: "",
-      confirm_password: "",
+      phone: "",
       error: "",
       success: "",
     };
@@ -137,18 +137,30 @@ export default {
   methods: {
     async register() {
       axios
-        .post('/api/authentication/register', {
+        .post('/api/customer/signup', { 
           firstname: this.firstname,
           lastname: this.lastname,
           email: this.email,
           password: this.password,
-          confirm_password: this.confirm_password,
-          url: 'http://localhost:3000/login?token='
+          phone: this.phone
         })
         .then((response) => {
-          if (response.data && response.data.message) {
+          if (response && response.data && response.data.message) {
             this.error = response.data.message;
           }
+          else {
+            this.error = "Enregisté";
+          }
+          window.scrollTo(0, 0);
+        })
+        .catch((error) => {
+          if (error.response && error.response.data && error.response.data.message) {
+            this.error = error.response.data.message;
+          }
+          else {
+            this.error = "Erreur";
+          }
+          window.scrollTo(0, 0);
         });
     }
   }

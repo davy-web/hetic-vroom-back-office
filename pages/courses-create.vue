@@ -1,5 +1,5 @@
 <template>
-  <section id="page-childrens" class="">
+  <section id="page-courses" class="">
     <div class="overflow-hidden">
       <div class="mx-auto">
 
@@ -13,12 +13,12 @@
 
           <div class="grid px-8 md:px-12 md:gap-8">
             <div>
-              <h3 class="vroom_text_color">Ajouter un enfant de {{ parentFirstname }}</h3>
+              <h3 class="vroom_text_color">Ajouter un course pour {{ parentFirstname }}</h3>
               <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/" class="nuxt-link-active">Dashboard</a></li>
                 <li class="breadcrumb-item"><nuxt-link :to="'customers'" class="nuxt-link-active">Liste parents</nuxt-link></li>
                 <li class="breadcrumb-item"><nuxt-link :to="'customers-update?id=' + parentId + '&firstname=' + parentFirstname" class="nuxt-link-active">Parent</nuxt-link></li>
-                <li class="breadcrumb-item">Ajouter enfant</li>
+                <li class="breadcrumb-item">Ajouter course</li>
               </ol>
             </div>
           </div>
@@ -63,8 +63,8 @@
           <div class="grid px-8 md:px-12 md:grid-cols-3 md:gap-8">
             <div>
               <label class="form-label vroom_label" for="image">
-                Image du enfant<br><br>
-                <img src="https://hetic-vroom-api.one-website.com/images/default.png" id="image_enfant" class="vroom_image" alt="image"><br>
+                Image du course<br><br>
+                <img src="https://hetic-vroom-api.one-website.com/images/default.png" id="image_course" class="vroom_image" alt="image"><br>
               </label>
               <input type="file" id="image" name="image">
             </div>
@@ -87,7 +87,7 @@
 import axios from "axios";
 
 export default {
-  name: "Childrens",
+  name: "courses",
 
   data() {
     return {
@@ -102,7 +102,7 @@ export default {
   head() {
     return {
       bodyAttrs: {
-        class: "childrens",
+        class: "courses",
       },
     };
   },
@@ -141,7 +141,7 @@ export default {
   mounted() {
     if (localStorage.getItem("token")) {
       document.getElementById("image").addEventListener('change', function (event) {
-        document.getElementById("image_enfant").src = URL.createObjectURL(document.getElementById("image").files[0]);
+        document.getElementById("image_course").src = URL.createObjectURL(document.getElementById("image").files[0]);
       });
       if (this.$route.query.id) {
         this.parentId = this.$route.query.id;
