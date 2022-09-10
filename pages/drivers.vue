@@ -13,7 +13,7 @@
           </div>
         </div>
 
-        <div class="flex justify-between py-8 mt-6 bg-transparent border-t border-gray-100 rounded-b md:px-12 bg-grey-light">
+        <div class="flex justify-between px-8 bg-transparent border-t border-gray-100 rounded-b md:px-12 bg-grey-light">
           <t-button type="submit" variant="primary" href="/drivers-create" class="px-5 py-3 transitions-colors vroom_bg_color vroom_uppercase">
             <span class="text-md text-white">Ajouter un chauffeur</span>
           </t-button>

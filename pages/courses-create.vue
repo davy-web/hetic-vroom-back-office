@@ -51,23 +51,14 @@
           </div>
           <div class="grid px-8 md:px-12 md:gap-8">
             <base-input-text
-              type="date"
-              namefor="birthday"
-              label="Date de naissance"
+              type="text"
+              namefor="address"
+              label="Adresse"
               placeholder=" "
               :required="true"
-              v-model="birthday"
+              v-model="address"
               class="border-b-2 md:mr-8 border-primary-vert1"
             />
-          </div>
-          <div class="grid px-8 md:px-12 md:grid-cols-3 md:gap-8">
-            <div>
-              <label class="form-label vroom_label" for="image">
-                Image du course<br><br>
-                <img src="https://hetic-vroom-api.one-website.com/images/default.png" id="image_course" class="vroom_image" alt="image"><br>
-              </label>
-              <input type="file" id="image" name="image">
-            </div>
           </div>
 
           <div class="flex justify-between py-8 mt-8 bg-transparent border-t border-gray-100 rounded-b md:px-12 bg-grey-light">
@@ -94,7 +85,7 @@ export default {
       error: "",
       firstname: "",
       lastname: "",
-      birthday: "",
+      address: "",
       parentId: "",
       parentFirstname: "",
     };
@@ -108,14 +99,8 @@ export default {
   },
   methods: {
     async create() {
-      const form_data = new FormData();
-      form_data.append('firstname', this.firstname);
-      form_data.append('lastname', this.lastname);
-      form_data.append('birthday', this.birthday);
-      form_data.append('parentId', this.parentId);
-      form_data.append('images', document.getElementById('image').files[0]);
       axios
-      .put('/api/child/add/', form_data, { headers: { 'Content-Type': 'multipart/form-data' } })
+      .put('/api/ride/getOffers')
       .then((response) => {
         console.log(response);
         if (response && response.data && response.data.message) {
@@ -140,9 +125,6 @@ export default {
   },
   mounted() {
     if (localStorage.getItem("token")) {
-      document.getElementById("image").addEventListener('change', function (event) {
-        document.getElementById("image_course").src = URL.createObjectURL(document.getElementById("image").files[0]);
-      });
       if (this.$route.query.id) {
         this.parentId = this.$route.query.id;
       }
