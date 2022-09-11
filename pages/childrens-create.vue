@@ -117,17 +117,9 @@ export default {
       axios
       .put('/api/child/add/', form_data, { headers: { 'Content-Type': 'multipart/form-data' } })
       .then((response) => {
-        console.log(response);
-        if (response && response.data && response.data.message) {
-          this.error = response.data.message;
-        }
-        else {
-          this.error = "Enregisté";
-        }
-        window.scrollTo(0, 0);
+        window.location.href = "/customers-update?id=" + this.parentId + "&firstname=" + this.parentFirstname;
       })
       .catch((error) => {
-        console.log(error);
         if (error.response && error.response.data && error.response.data.message) {
           this.error = error.response.data.message;
         }

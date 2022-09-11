@@ -64,7 +64,7 @@
                 namefor="adress_retour"
                 label="Adresse de retour"
                 placeholder=" "
-                :required="true"
+                :required="false"
                 class="border-b-2 md:mr-8 border-primary-vert1"
                 v-model="adress_retour"
                 v-on:input="function_search_adress_retour"
@@ -80,7 +80,7 @@
               namefor="date_retour"
               label="Date de retour"
               placeholder=" "
-              :required="true"
+              :required="false"
               v-model="courses.dates[0].retour"
               class="border-b-2 border-primary-vert1"
             />

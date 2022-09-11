@@ -154,13 +154,7 @@ export default {
         axios
           .post('/api/driver/addDriver', form_data, { headers: { 'Content-Type': 'multipart/form-data' } })
           .then((response) => {
-            if (response && response.data && response.data.message) {
-              this.error = response.data.message;
-            }
-            else {
-              this.error = "Enregisté";
-            }
-            window.scrollTo(0, 0);
+            window.location.href = "/drivers";
           })
           .catch((error) => {
             if (error.response && error.response.data && error.response.data.message) {

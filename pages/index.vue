@@ -12,7 +12,7 @@
         <bloc-card
           subtitle="Chauffeurs en course"
           color="#F4DFF8"
-          number="8"
+          number="1"
           class=""
           icons="parents"
         ></bloc-card>
@@ -24,7 +24,7 @@
           imageUrl="/assets/images/logo/logo-vroom-light.png"
           color="#F4DFF8"
           subtitle="Parents inscrits"
-          number="60"
+          number="2"
           class=""
           icons="drivers"
         ></bloc-card>
@@ -34,7 +34,7 @@
       >
         <bloc-card
           subtitle="Enfants vroomés"
-          number="299"
+          number="2"
           class=""
           color="#F4DFF8"
           icons="childs"

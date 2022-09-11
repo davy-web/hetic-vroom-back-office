@@ -2,7 +2,7 @@
   <div class="col-xl-12 box-col-6 des-xl-50">
     <div class="mb-0 card profile-greeting">
       <div class="p-12 text-center card-body">
-        <h3 class="text-3xl font-bold text-black">Bonjour, Anthony</h3>
+        <h3 class="text-3xl font-bold text-black">Bonjour, {{ name_admin }}</h3>
         <p class="font-medium text-black">
           Vous êtes sur le dashboard de l'app Vroom, vous trouverez ici tout les
           infos de gestions dont vous aurez besoin.
@@ -36,7 +36,16 @@
 <script>
 export default {
   name: "Welcome",
-  computed: {},
+  data() {
+    return {
+      name_admin: ""
+    };
+  },
+  mounted() {
+    if (localStorage.getItem("name_admin")) {
+      this.name_admin = localStorage.getItem("name_admin");
+    }
+  },
 };
 </script>
 
