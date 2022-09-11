@@ -16,11 +16,9 @@
         </div>
 
         <div class="flex justify-between px-8 bg-transparent border-t border-gray-100 rounded-b md:px-12 bg-grey-light">
-          <nuxt-link :to="'childrens-create?id=' + parentId + '&firstname=' + parentFirstname" class="vroom_pointer">
-            <t-button type="submit" variant="primary" class="px-5 py-3 transitions-colors vroom_bg_color vroom_uppercase">
-              <span class="text-md text-white">Ajouter un enfant</span>
-            </t-button>
-          </nuxt-link>
+          <t-button type="submit" :href="'childrens-create?id=' + parentId + '&firstname=' + parentFirstname" variant="primary" class="px-5 py-3 transitions-colors vroom_bg_color vroom_uppercase">
+            <span class="text-md text-white">Ajouter un enfant</span>
+          </t-button>
         </div>
 
         <div class="flex justify-between py-8 mt-6 bg-transparent border-t border-gray-100 rounded-b md:px-12 bg-grey-light">
@@ -53,11 +51,9 @@
         </div>
 
         <div class="flex justify-between px-8 bg-transparent border-t border-gray-100 rounded-b md:px-12 bg-grey-light">
-          <nuxt-link :to="'courses-create?id=' + parentId + '&firstname=' + parentFirstname" class="vroom_pointer">
-            <t-button type="submit" variant="primary" class="px-5 py-3 transitions-colors vroom_bg_color vroom_uppercase">
-              <span class="text-md text-white">Ajouter une course</span>
-            </t-button>
-          </nuxt-link>
+          <t-button type="submit" :href="'courses-create?id=' + parentId + '&firstname=' + parentFirstname" variant="primary" class="px-5 py-3 transitions-colors vroom_bg_color vroom_uppercase">
+            <span class="text-md text-white">Ajouter une course</span>
+          </t-button>
         </div>
 
         <div class="flex justify-between py-8 mt-6 bg-transparent border-t border-gray-100 rounded-b md:px-12 bg-grey-light">

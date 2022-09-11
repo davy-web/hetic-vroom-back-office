@@ -30,35 +30,62 @@
           </div>
 
           <div class="grid px-8 md:px-12 md:pt-12 md:grid-cols-2 md:gap-8">
+            <div class="block_adress">
+              <base-input-text
+                type="text"
+                namefor="adress_aller"
+                label="Adresse d'aller"
+                placeholder=" "
+                :required="true"
+                class="border-b-2 md:mr-8 border-primary-vert1"
+                v-model="adress_aller"
+                v-on:input="function_search_adress_aller"
+              />
+              <div class="select_adress w-full">
+                <a class="option_adress" href="">oui</a>
+                <a class="option_adress" href="">oui</a>
+              </div>
+            </div>
+            <base-input-text
+              type="date"
+              namefor="date_aller"
+              label="Date d'aller"
+              placeholder=" "
+              :required="true"
+              v-model="courses.dates[0].aller"
+              class="border-b-2 border-primary-vert1"
+            />
+          </div>
+          <div class="grid px-8 md:px-12 md:pt-12 md:grid-cols-2 md:gap-8">
             <base-input-text
               type="text"
-              namefor="firstname"
-              label="Prénom"
+              namefor="adress_retour"
+              label="Adresse de retour"
               placeholder=" "
               :required="true"
               class="border-b-2 md:mr-8 border-primary-vert1"
-              v-model="firstname"
+              v-model="adress_retour"
+              v-on:input="function_search_adress_retour"
             />
             <base-input-text
-              type="text"
-              namefor="lastname"
-              label="Nom"
+              type="date"
+              namefor="date_retour"
+              label="Date de retour"
               placeholder=" "
               :required="true"
-              v-model="lastname"
+              v-model="courses.dates[0].retour"
               class="border-b-2 border-primary-vert1"
             />
           </div>
           <div class="grid px-8 md:px-12 md:gap-8">
-            <base-input-text
-              type="text"
-              namefor="address"
-              label="Adresse"
-              placeholder=" "
-              :required="true"
-              v-model="address"
-              class="border-b-2 md:mr-8 border-primary-vert1"
-            />
+            <div style="transform: translateY(-20px);">
+              <label class="form-label vroom_label">Enfant(s)</label>
+              <select class="form-select vroom_select" v-model="courses.passengerIds" aria-label="Default select example">
+                <option v-for="children in childrens" :value="children._id" :key="children._id">
+                  {{ children.firstname }} {{ children.lastname }}
+                </option>
+              </select>
+            </div>
           </div>
 
           <div class="flex justify-between py-8 mt-8 bg-transparent border-t border-gray-100 rounded-b md:px-12 bg-grey-light">
@@ -83,11 +110,43 @@ export default {
   data() {
     return {
       error: "",
-      firstname: "",
-      lastname: "",
-      address: "",
+      courses: {
+        "customerId": "",
+        "passengerIds": [],
+        "dates" : [
+          {
+            "aller" : "",
+            "retour" : "",
+            "typeTrajet": "ALLER SIMPLE"
+          }
+        ],
+        "frequency": "REGULAR",
+        "pickUp": {
+          "address1": "",
+          "address2": "",
+          "postalCode": 0,
+          "city": "",
+          "country": "",
+          "lon": 0,
+          "lat": 0
+        },
+        "dropOff": {
+          "address1": "",
+          "address2": "",
+          "postalCode": 0,
+          "city": "",
+          "country": "",
+          "lon": 0,
+          "lat": 0
+        }
+      },
+      childrens: "",
       parentId: "",
       parentFirstname: "",
+      adress_aller: "",
+      adress_retour: "",
+      search_adress_aller: [],
+      search_adress_retour: [],
     };
   },
   head() {
@@ -98,10 +157,46 @@ export default {
     };
   },
   methods: {
+    async function_search_adress_aller() {
+      if (this.adress_aller.length >= 3) {
+        axios
+        .post('/api/ride/searchAddress', {
+          "query": this.adress_aller
+        })
+        .then((response) => {
+          console.log("response");
+          if (response.data && response.data.results) {
+            this.search_adress_aller = response.data.results
+            console.log(response.data.results);
+          }
+        })
+        .catch((error) => {
+          console.log("error");
+          console.log(error);
+        });
+      }
+    },
+    async function_search_adress_retour() {
+      axios
+      .post('/api/ride/searchAddress', {
+        "query": this.adress_retour
+      })
+      .then((response) => {
+        console.log("response");
+        if (response.data && response.data.results) {
+          console.log(response.data.results);
+        }
+      })
+      .catch((error) => {
+        console.log("error");
+        console.log(error);
+      });
+    },
     async create() {
       axios
-      .put('/api/ride/getOffers')
+      .put('/api/ride/getOffers', courses)
       .then((response) => {
+        console.log("response");
         console.log(response);
         if (response && response.data && response.data.message) {
           this.error = response.data.message;
@@ -112,6 +207,7 @@ export default {
         window.scrollTo(0, 0);
       })
       .catch((error) => {
+        console.log("error");
         console.log(error);
         if (error.response && error.response.data && error.response.data.message) {
           this.error = error.response.data.message;
@@ -127,6 +223,16 @@ export default {
     if (localStorage.getItem("token")) {
       if (this.$route.query.id) {
         this.parentId = this.$route.query.id;
+        this.courses.customerId = this.$route.query.id;
+        axios
+          .get('/api/child/parent/' + this.$route.query.id)
+          .then((response) => {
+            this.childrens = response.data;
+          })
+          .catch((error) => {
+            console.log("error");
+            console.log(error);
+          });
       }
       if (this.$route.query.firstname) {
         this.parentFirstname = this.$route.query.firstname;
@@ -164,5 +270,20 @@ export default {
 }
 .vroom_hidden {
   opacity: 0;
+}
+.block_adress {
+  position: relative;
+}
+.select_adress {
+  position: absolute;
+  margin-top: -27px;
+  border: 2px solid #20D8D2;
+  background: white;
+  width: 100%;
+  border-radius: 4px;
+  padding: 0 8px;
+}
+.option_adress {
+  display: block;
 }
 </style>
